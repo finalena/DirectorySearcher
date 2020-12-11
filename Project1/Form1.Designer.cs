@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.btnSearch = new System.Windows.Forms.Button();
             this.txtPath = new System.Windows.Forms.TextBox();
             this.txtSearchCriteria = new System.Windows.Forms.TextBox();
@@ -37,8 +38,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.txtKeyWord = new System.Windows.Forms.TextBox();
             this.chkIgnoreCase = new System.Windows.Forms.CheckBox();
-            this.directorySearcher = new LYHControl.DirectorySearcher.DirectorySearcher();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.directorySearcher = new LYHControl.DirectorySearcher.DirectorySearcher();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -70,37 +71,37 @@
             this.chkSubDir.AutoSize = true;
             this.chkSubDir.Location = new System.Drawing.Point(483, 28);
             this.chkSubDir.Name = "chkSubDir";
-            this.chkSubDir.Size = new System.Drawing.Size(76, 16);
+            this.chkSubDir.Size = new System.Drawing.Size(102, 16);
             this.chkSubDir.TabIndex = 5;
-            this.chkSubDir.Text = "子目錄(&D)";
+            this.chkSubDir.Text = "SubDirectory(&D)";
             this.chkSubDir.UseVisualStyleBackColor = true;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(24, 80);
+            this.label3.Location = new System.Drawing.Point(14, 80);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(53, 12);
+            this.label3.Size = new System.Drawing.Size(51, 12);
             this.label3.TabIndex = 11;
-            this.label3.Text = "尋找內容";
+            this.label3.Text = "KeyWord";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(24, 53);
+            this.label2.Location = new System.Drawing.Point(14, 53);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(29, 12);
+            this.label2.Size = new System.Drawing.Size(68, 12);
             this.label2.TabIndex = 10;
-            this.label2.Text = "附檔";
+            this.label2.Text = "FileExtension";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(24, 25);
+            this.label1.Location = new System.Drawing.Point(14, 25);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(29, 12);
+            this.label1.Size = new System.Drawing.Size(25, 12);
             this.label1.TabIndex = 9;
-            this.label1.Text = "路徑";
+            this.label1.Text = "Path";
             // 
             // txtKeyWord
             // 
@@ -114,10 +115,20 @@
             this.chkIgnoreCase.AutoSize = true;
             this.chkIgnoreCase.Location = new System.Drawing.Point(483, 52);
             this.chkIgnoreCase.Name = "chkIgnoreCase";
-            this.chkIgnoreCase.Size = new System.Drawing.Size(100, 16);
+            this.chkIgnoreCase.Size = new System.Drawing.Size(93, 16);
             this.chkIgnoreCase.TabIndex = 6;
-            this.chkIgnoreCase.Text = "忽略大小寫(&C)";
+            this.chkIgnoreCase.Text = "IgnoreCase(&C)";
             this.chkIgnoreCase.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.directorySearcher);
+            this.groupBox1.Location = new System.Drawing.Point(12, 120);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(571, 279);
+            this.groupBox1.TabIndex = 18;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Result";
             // 
             // directorySearcher
             // 
@@ -130,16 +141,6 @@
             this.directorySearcher.SearchCriteria = null;
             this.directorySearcher.Size = new System.Drawing.Size(559, 256);
             this.directorySearcher.TabIndex = 0;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.directorySearcher);
-            this.groupBox1.Location = new System.Drawing.Point(12, 120);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(571, 279);
-            this.groupBox1.TabIndex = 18;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "尋找結果";
             // 
             // Form1
             // 
@@ -157,11 +158,12 @@
             this.Controls.Add(this.txtPath);
             this.Controls.Add(this.btnSearch);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Search Directories";
+            this.Text = "File-KeyWord-Search";
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

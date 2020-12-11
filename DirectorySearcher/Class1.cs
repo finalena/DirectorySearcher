@@ -6,6 +6,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.IO;
 using System.Drawing.Printing;
+using Word = Microsoft.Office.Interop.Word;
 
 namespace LYHControl.DirectorySearcher
 {
@@ -123,6 +124,11 @@ namespace LYHControl.DirectorySearcher
             }
         }
 
+        /// <summary>
+        /// This method is called by the background thread when it has finished the search.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnSearchComplete(object sender, EventArgs e)
         {
             if (SearchComplete != null)
@@ -145,14 +151,13 @@ namespace LYHControl.DirectorySearcher
             bSearching = false;
         }
 
-        private void RecurseDirectory(string sSearchPath)
+        private void RecurseDirectory(string sSearchPath, string sSearchCriteria)
         {
-            string[] files;
+            string[] ArrFile;
             // File systems like NTFS that have access permissions might result in exceptions when looking into directories without permission. Catch those exceptions and return.
             try
             {
-                files = Directory.GetFiles(sSearchPath, SearchCriteria);
-                iFilesCount += files.Length;
+                ArrFile = Directory.GetFiles(sSearchPath, sSearchCriteria);
             }
             catch (UnauthorizedAccessException)
             {
@@ -163,43 +168,76 @@ namespace LYHControl.DirectorySearcher
                 return;
             }
 
+            iFilesCount += ArrFile.Length;
             int count = 0;
-            while (count < files.Length)
+            while (count < ArrFile.Length)
             {
-                StreamReader reader = new StreamReader(files[count], Encoding.Default);
-                int iTemp = 0;
-                if(IsIgnoreCase)
+                bool HasKeyWord = false;
+                if (!sSearchCriteria.Contains("doc"))
                 {
-                    iTemp = reader.ReadToEnd().IndexOf(sKeyWord, StringComparison.OrdinalIgnoreCase);
+                    StreamReader reader = new StreamReader(ArrFile[count], Encoding.Default);
+                    SerachKeyWord(reader.ReadToEnd(), ref HasKeyWord);
                 }
                 else
                 {
-                    iTemp = reader.ReadToEnd().IndexOf(sKeyWord);
+                    Word.Application WordApp = new Word.Application();
+                    Word.Document WordDoc = WordApp.Documents.Open(ArrFile[count], ReadOnly: true);
+
+                    for (int intA = 1; intA <= WordDoc.Paragraphs.Count; intA++)
+                    {
+                        string sContent = WordDoc.Paragraphs[intA].Range.Text;
+                        SerachKeyWord(sContent, ref HasKeyWord);
+                        if (HasKeyWord) break;
+                    }
+
+                    WordDoc.Close(false);
+                    WordApp.Quit(false);
+                    System.Runtime.InteropServices.Marshal.ReleaseComObject(WordDoc);
+                    System.Runtime.InteropServices.Marshal.ReleaseComObject(WordApp);
+                    WordDoc = null;
+                    WordApp = null;
                 }
 
-                if (iTemp >= 0)
+                if (HasKeyWord)
                 {
                     iMatchFile++;
-                    IAsyncResult r = BeginInvoke(fileListDelegate, new object[] { files[count] });
+                    IAsyncResult r = BeginInvoke(fileListDelegate, new object[] { ArrFile[count] });
                 }
                 count++;
             }
+
             if (IsSubDir)
             {
                 string[] directories = Directory.GetDirectories(sSearchPath);
                 foreach (string dir in directories)
                 {
-                    RecurseDirectory(dir);
+                    RecurseDirectory(dir, sSearchCriteria);
                 }    
             }
         }
+        private void SerachKeyWord(string sContect, ref bool HasKeyWord) 
+        {
+            int iTemp = 0;
+            if (IsIgnoreCase)
+            {
+                iTemp = sContect.IndexOf(sKeyWord, StringComparison.OrdinalIgnoreCase);
+            }
+            else
+            {
+                iTemp = sContect.IndexOf(sKeyWord);
+            }
 
-
+            if (iTemp >= 0) HasKeyWord = true;
+        }
         private void ThreadProcedure()
         {
             try
             {
-                RecurseDirectory(FilePath);
+                string[] ArrSearchCriteria = SearchCriteria.Replace(" ", "").Split(',');
+                foreach (string str in ArrSearchCriteria)
+                {
+                    RecurseDirectory(FilePath, str);   
+                }
             }
             finally
             {
