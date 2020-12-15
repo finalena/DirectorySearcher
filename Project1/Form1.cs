@@ -20,7 +20,7 @@ namespace Project1
             this.btnSearch.Click += new EventHandler(Button_Click);
             this.chkIgnoreCase.Checked = true;
             this.txtSearchCriteria.Text = @"*.doc";
-            this.txtPath.Text = @"D:\Users\yhlin\Desktop\國外部\國外部套表\word\SubFile";
+            this.txtPath.Text = @"D:\Users\yhlin\Desktop\";
 
             this.AcceptButton = this.btnSearch;
         }
@@ -49,7 +49,7 @@ namespace Project1
 
                 this.groupBox1.Text = "Result (Searching...)";
                 this.Cursor = Cursors.AppStarting;
-                directorySearcher.BeginSearch();
+                directorySearcher.BeginSearch(); 
             }
         }
 

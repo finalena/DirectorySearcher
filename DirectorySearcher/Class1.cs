@@ -7,6 +7,8 @@ using System.Windows.Forms;
 using System.IO;
 using System.Drawing.Printing;
 using Word = Microsoft.Office.Interop.Word;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace LYHControl.DirectorySearcher
 {
@@ -182,7 +184,7 @@ namespace LYHControl.DirectorySearcher
                 {
                     Word.Application WordApp = new Word.Application();
                     Word.Document WordDoc = WordApp.Documents.Open(ArrFile[count], ReadOnly: true);
-
+                   
                     for (int intA = 1; intA <= WordDoc.Paragraphs.Count; intA++)
                     {
                         string sContent = WordDoc.Paragraphs[intA].Range.Text;
@@ -229,21 +231,17 @@ namespace LYHControl.DirectorySearcher
 
             if (iTemp >= 0) HasKeyWord = true;
         }
+        
         private void ThreadProcedure()
         {
-            try
+            string[] ArrSearchCriteria = SearchCriteria.Replace(" ", "").Split(',');
+            foreach (string str in ArrSearchCriteria)
             {
-                string[] ArrSearchCriteria = SearchCriteria.Replace(" ", "").Split(',');
-                foreach (string str in ArrSearchCriteria)
-                {
-                    RecurseDirectory(FilePath, str);   
-                }
+                RecurseDirectory(FilePath, str);   
             }
-            finally
-            {
-                bSearching = false;
-                BeginInvoke(onSearchComplete, new object[] { this, EventArgs.Empty });
-            }
+
+            bSearching = false;
+            BeginInvoke(onSearchComplete, new object[] { this, EventArgs.Empty });
         }
 
         private void listBox_MouseDoubleClick(object sender, MouseEventArgs e)
