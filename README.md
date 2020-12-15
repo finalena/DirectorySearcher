@@ -1,7 +1,7 @@
 # File-KeyWord-Search
 A small C# program to search for a keyword within files in a folder recursively.  
-
-
+## ScreenShot
+![File-KeyWord-Search](https://github.com/finalena/File-KeyWord-Search/Screenshot.jpg)  
 ## References
 [MSDN: How to: Use a Background Thread to Search for Files](https://docs.microsoft.com/en-us/dotnet/desktop/winforms/controls/how-to-use-a-background-thread-to-search-for-files?view=netframeworkdesktop-4.8)  
 [StreamReader.ReadToEnd() returning an empty string](https://stackoverflow.com/questions/2572963/streamreader-readtoend-returning-an-empty-string)  
